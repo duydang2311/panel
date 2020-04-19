@@ -61,6 +61,9 @@ static PlayerText:td_Panel_Container_Box[MAX_PLAYERS] = {PlayerText:INVALID_TEXT
     PlayerText:td_Panel_Previous_Button[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...},
     PlayerText:td_Panel_Next_Button[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
 
+forward Panel_OnSelect(playerid, panel_id, item_id);
+forward Panel_OnDestroy(playerid, panel_id);
+
 stock Panel_Show(const playerid, const panel_id, const items[], const item_size = MAX_PANEL_ITEMS, const max_page = 1)
 {
     if(panel_id < 0)
@@ -395,7 +398,7 @@ public OnPlayerConnect(playerid)
     
     Panel_Destroy(playerid);
 
-	CallLocalFunction("panel@OnPlayerConnect", "i", playerid);
+    CallLocalFunction("panel@OnPlayerConnect", "i", playerid);
     return 1;
 }
 
@@ -425,7 +428,7 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
         }
     }
 
-	CallLocalFunction("panel@OnPlayerClickPlayerTD", "ii", playerid, _:playertextid);
+    CallLocalFunction("panel@OnPlayerClickPlayerTD", "ii", playerid, _:playertextid);
     return 1;
 }
 
@@ -436,7 +439,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
         if(panelData[playerid][panel_Id] != -1)
         {
             CallLocalFunction("Panel_OnDestroy", "ii", playerid, panelData[playerid][panel_Id]);
-            Panel_Destroy();
+            Panel_Destroy(playerid);
         }
     }
 
@@ -445,27 +448,27 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 }
 
 #if defined _ALS_OnPlayerClickTextDraw
-	#undef OnPlayerClickTextDraw
+    #undef OnPlayerClickTextDraw
 #else
-	#define _ALS_OnPlayerClickTextDraw
+    #define _ALS_OnPlayerClickTextDraw
 #endif
 #define OnPlayerClickTextDraw panel@OnPlayerClickTextDraw
 
 forward panel@OnPlayerClickTextDraw(playerid, Text:clickedid);
 
 #if defined _ALS_OnPlayerClickPlayerTD
-	#undef OnPlayerClickPlayerTextDraw
+    #undef OnPlayerClickPlayerTextDraw
 #else
-	#define _ALS_OnPlayerClickPlayerTD
+    #define _ALS_OnPlayerClickPlayerTD
 #endif
 #define OnPlayerClickPlayerTextDraw panel@OnPlayerClickPlayerTD
 
 forward panel@OnPlayerClickPlayerTD(playerid, PlayerText:playertextid);
 
 #if defined _ALS_OnPlayerConnect
-	#undef OnPlayerConnect
+    #undef OnPlayerConnect
 #else
-	#define _ALS_OnPlayerConnect
+    #define _ALS_OnPlayerConnect
 #endif
 #define OnPlayerConnect panel@OnPlayerConnect
 

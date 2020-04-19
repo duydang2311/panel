@@ -1,0 +1,7 @@
+{
+	"user": "duydang2311",
+	"repo": "panel",
+	"dependencies": [
+		"sampctl/samp-stdlib"
+	]
+}

@@ -11,6 +11,8 @@
             item_id: PREVIOUS_BUTTON_ITEM -> previous button
             item_id: NEXT_BUTTON_ITEM -> next button
 
+        Panel_OnDestroy(playerid, panel_id)
+
     Functions: 
         Panel_Show(playerid, panel_id, items[], item_size = MAX_PANEL_ITEMS, max_page = 1);
         Panel_Destroy(playerid);
@@ -89,8 +91,10 @@ stock Panel_Show(const playerid, const panel_id, const items[], const item_size 
 
     for(new i = 0; i < item_size; i++)
     {
+        printf("panel: item_size %d, item model %d, ", item_size, items[i]);
         if(td_Panel_Items[playerid][i] == PlayerText:INVALID_TEXT_DRAW)
         {
+            printf("    pos: %.2f, %.2f", FIRST_ITEM_POS_X + itemPositionOffsets[i][0], FIRST_ITEM_POS_Y + itemPositionOffsets[i][1]);
             td_Panel_Items[playerid][i] = CreatePlayerTextDraw(playerid, FIRST_ITEM_POS_X + itemPositionOffsets[i][0], FIRST_ITEM_POS_Y + itemPositionOffsets[i][1], "Preview_Model");
             PlayerTextDrawFont(playerid, td_Panel_Items[playerid][i], 5);
             PlayerTextDrawLetterSize(playerid, td_Panel_Items[playerid][i], 0.600000, 2.000000);
@@ -424,6 +428,30 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 	CallLocalFunction("panel@OnPlayerClickPlayerTD", "ii", playerid, _:playertextid);
     return 1;
 }
+
+public OnPlayerClickTextDraw(playerid, Text:clickedid)
+{
+    if(clickedid == Text:INVALID_TEXT_DRAW)
+    {
+        if(panelData[playerid][panel_Id] != -1)
+        {
+            CallLocalFunction("Panel_OnDestroy", "ii", playerid, panelData[playerid][panel_Id]);
+            Panel_Destroy();
+        }
+    }
+
+    CallLocalFunction("panel@OnPlayerClickTextDraw", "ii", playerid, _:clickedid);
+    return 1;
+}
+
+#if defined _ALS_OnPlayerClickTextDraw
+	#undef OnPlayerClickTextDraw
+#else
+	#define _ALS_OnPlayerClickTextDraw
+#endif
+#define OnPlayerClickTextDraw panel@OnPlayerClickTextDraw
+
+forward panel@OnPlayerClickTextDraw(playerid, Text:clickedid);
 
 #if defined _ALS_OnPlayerClickPlayerTD
 	#undef OnPlayerClickPlayerTextDraw

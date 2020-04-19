@@ -14,7 +14,7 @@
         Panel_OnDestroy(playerid, panel_id)
 
     Functions: 
-        Panel_Show(playerid, panel_id, items[], item_size = MAX_PANEL_ITEMS, max_page = 1);
+        Panel_Show(playerid, panel_id, name[], items[], item_size = MAX_PANEL_ITEMS, max_page = 1);
         Panel_Destroy(playerid);
         Panel_UpdatePage(playerid, page, items[], item_size = MAX_PANEL_ITEMS);
         Panel_NextPage(playerid, items[], item_size = MAX_PANEL_ITEMS);
@@ -64,7 +64,7 @@ static PlayerText:td_Panel_Container_Box[MAX_PLAYERS] = {PlayerText:INVALID_TEXT
 forward Panel_OnSelect(playerid, panel_id, item_id);
 forward Panel_OnDestroy(playerid, panel_id);
 
-stock Panel_Show(const playerid, const panel_id, const items[], const item_size = MAX_PANEL_ITEMS, const max_page = 1)
+stock Panel_Show(const playerid, const panel_id, const name[], const items[], const item_size = MAX_PANEL_ITEMS, const max_page = 1)
 {
     if(panel_id < 0)
     {
@@ -94,10 +94,8 @@ stock Panel_Show(const playerid, const panel_id, const items[], const item_size 
 
     for(new i = 0; i < item_size; i++)
     {
-        printf("panel: item_size %d, item model %d, ", item_size, items[i]);
         if(td_Panel_Items[playerid][i] == PlayerText:INVALID_TEXT_DRAW)
         {
-            printf("    pos: %.2f, %.2f", FIRST_ITEM_POS_X + itemPositionOffsets[i][0], FIRST_ITEM_POS_Y + itemPositionOffsets[i][1]);
             td_Panel_Items[playerid][i] = CreatePlayerTextDraw(playerid, FIRST_ITEM_POS_X + itemPositionOffsets[i][0], FIRST_ITEM_POS_Y + itemPositionOffsets[i][1], "Preview_Model");
             PlayerTextDrawFont(playerid, td_Panel_Items[playerid][i], 5);
             PlayerTextDrawLetterSize(playerid, td_Panel_Items[playerid][i], 0.600000, 2.000000);
@@ -124,7 +122,7 @@ stock Panel_Show(const playerid, const panel_id, const items[], const item_size 
 
     if(td_Panel_Name[playerid] == PlayerText:INVALID_TEXT_DRAW)
     {
-        td_Panel_Name[playerid] = CreatePlayerTextDraw(playerid, 97.000000, 309.000000, "PANEL_NAME");
+        td_Panel_Name[playerid] = CreatePlayerTextDraw(playerid, 97.000000, 309.000000, name);
         PlayerTextDrawFont(playerid, td_Panel_Name[playerid], 3);
         PlayerTextDrawLetterSize(playerid, td_Panel_Name[playerid], 0.600000, 2.000000);
         PlayerTextDrawTextSize(playerid, td_Panel_Name[playerid], 220.000000, -16.500000);
@@ -138,8 +136,12 @@ stock Panel_Show(const playerid, const panel_id, const items[], const item_size 
         PlayerTextDrawSetProportional(playerid, td_Panel_Name[playerid], 1);
         PlayerTextDrawSetSelectable(playerid, td_Panel_Name[playerid], 0);
     }
+    else
+    {
+        PlayerTextDrawSetString(playerid, td_Panel_Name[playerid], name);
+    }
 
-    if(panelData[playerid][panel_Max_Page] <= 1)
+    if(panelData[playerid][panel_Max_Page] > 1)
     {
         if(td_Panel_Page_Box[playerid] == PlayerText:INVALID_TEXT_DRAW)
         {
@@ -398,7 +400,7 @@ public OnPlayerConnect(playerid)
     
     Panel_Destroy(playerid);
 
-    CallLocalFunction("panel@OnPlayerConnect", "i", playerid);
+	CallLocalFunction("panel@OnPlayerConnect", "i", playerid);
     return 1;
 }
 
@@ -428,7 +430,7 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
         }
     }
 
-    CallLocalFunction("panel@OnPlayerClickPlayerTD", "ii", playerid, _:playertextid);
+	CallLocalFunction("panel@OnPlayerClickPlayerTD", "ii", playerid, _:playertextid);
     return 1;
 }
 
@@ -448,27 +450,27 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 }
 
 #if defined _ALS_OnPlayerClickTextDraw
-    #undef OnPlayerClickTextDraw
+	#undef OnPlayerClickTextDraw
 #else
-    #define _ALS_OnPlayerClickTextDraw
+	#define _ALS_OnPlayerClickTextDraw
 #endif
 #define OnPlayerClickTextDraw panel@OnPlayerClickTextDraw
 
 forward panel@OnPlayerClickTextDraw(playerid, Text:clickedid);
 
 #if defined _ALS_OnPlayerClickPlayerTD
-    #undef OnPlayerClickPlayerTextDraw
+	#undef OnPlayerClickPlayerTextDraw
 #else
-    #define _ALS_OnPlayerClickPlayerTD
+	#define _ALS_OnPlayerClickPlayerTD
 #endif
 #define OnPlayerClickPlayerTextDraw panel@OnPlayerClickPlayerTD
 
 forward panel@OnPlayerClickPlayerTD(playerid, PlayerText:playertextid);
 
 #if defined _ALS_OnPlayerConnect
-    #undef OnPlayerConnect
+	#undef OnPlayerConnect
 #else
-    #define _ALS_OnPlayerConnect
+	#define _ALS_OnPlayerConnect
 #endif
 #define OnPlayerConnect panel@OnPlayerConnect
 

@@ -49,6 +49,38 @@ in this section. If your library is passive and has no API, simply omit this
 section.
 -->
 
+Callbacks
+
+  ```pawn
+  public Panel_OnSelect(playerid, panel_id, item_id)
+  {
+    switch(item_id)
+    {
+        case PREVIOUS_BUTTON_ITEM: {}
+        case NEXT_BUTTON_ITEM: {}
+        default: // select item index
+    }
+  }
+
+  public Panel_OnDestroy(playerid, panel_id)
+  {
+
+  }
+  ```
+
+Functions:
+
+  ```pawn
+  Panel_Show(playerid, panel_id, name[], items[], item_size = MAX_PANEL_ITEMS, max_page = 1);
+  Panel_Destroy(playerid);
+  Panel_UpdatePage(playerid, page, items[], item_size = MAX_PANEL_ITEMS);
+  Panel_NextPage(playerid, items[], item_size = MAX_PANEL_ITEMS);
+  Panel_PreviousPage(playerid, items[], item_size = MAX_PANEL_ITEMS);
+  Panel_GetCurrentPage(playerid);
+  Panel_GetMaxPage(playerid);
+  Panel_GetId(playerid);
+  ```
+
 ## Testing
 
 <!--

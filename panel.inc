@@ -251,7 +251,7 @@ stock Panel_Show(const playerid, const panel_id, const name[], const items[], co
     return 1;
 }
 
-stock Panel_UpdatePage(const playerid, const page, const items[], const item_size = MAX_PANEL_ITEMS)
+stock Panel_UpdatePage(const playerid, page, const items[], const item_size = MAX_PANEL_ITEMS)
 {
     if(panelData[playerid][panel_Id] < 0)
     {
@@ -310,7 +310,7 @@ stock Panel_UpdatePage(const playerid, const page, const items[], const item_siz
 
     new string[11];
     format(string, sizeof(string), "%02d/%02d", page, panelData[playerid][panel_Max_Page]);
-    PlayerTextDrawSetString(playerid, td_Panel_Name[playerid]);
+    PlayerTextDrawSetString(playerid, td_Panel_Name[playerid], string);
     return 1;
 }
 

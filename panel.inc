@@ -310,7 +310,7 @@ stock Panel_UpdatePage(const playerid, page, const items[], const item_size = MA
 
     new string[11];
     format(string, sizeof(string), "%02d/%02d", page, panelData[playerid][panel_Max_Page]);
-    PlayerTextDrawSetString(playerid, td_Panel_Name[playerid], string);
+    PlayerTextDrawSetString(playerid, td_Panel_Page_Text[playerid], string);
     return 1;
 }
 
